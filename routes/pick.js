@@ -4,11 +4,11 @@ const router = express.Router();
 router.get('/', (req, res) => {
   // Array of image file names
   const image_names = [
-    'yellowrose.jpg', 
-    'veg.jpg', 
-    'badammilk.jpg', 
-    'baby.jpg', 
-    'moon.jpg'
+    'yellowrose.jpeg', 
+    'veg.jpeg', 
+    'badammilk.jpeg', 
+    'baby.jpeg', 
+    'moon.jpeg'
   ];
 
   res.render('randomitem', { title: 'A random item', image_names: image_names });
