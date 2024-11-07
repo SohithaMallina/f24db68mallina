@@ -1,24 +1,27 @@
 doctype html
 html
   head
-  link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
-  -
-    const results = [
-      { name: 'Herb 1', description: 'A fragrant herb used in various cuisines', uses: 'Used in cooking, teas, and as garnish' },
-      { name: 'Herb 2', description: 'A cooling herb commonly used for its medicinal properties', uses: 'Used for digestive problems and skin care' },
-      { name: 'Herb 3', description: 'A woody herb known for its strong aroma', uses: 'Used in roasting meats, flavoring soups, and in aromatherapy' }
-    ];
-    each item in results
-          div.col-sm-4
+    link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
+  body
+    div.container-fluid
+      div.row
+        - const results = [
+        -   { name: 'Herb 1', description: 'A fragrant herb used in various cuisines', uses: 'Used in cooking, teas, and as garnish' },
+        -   { name: 'Herb 2', description: 'A cooling herb commonly used for its medicinal properties', uses: 'Used for digestive problems and skin care' },
+        -   { name: 'Herb 3', description: 'A woody herb known for its strong aroma', uses: 'Used in roasting meats, flavoring soups, and in aromatherapy' }
+        - ]
+        each item in results
+          div.col-sm-4.mb-3
             div.card
               div.card-body
                 h5.card-title= item.name
-                p.card-text= item.description
-                p.card-text= item.uses
-div.container-fluid
-    div.row
-      - for (const herbs of results)
-        div.col-sm-2
-          p herb Name: #{herb.herb_name}
-          p description : #{herb.herb_description}
-          p uses: #{herb.herb_uses}
+                p.card-text
+                  strong Description: 
+                  | #{item.description}
+                p.card-text
+                  strong Uses: 
+                  | #{item.uses}
+
+    script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js")
