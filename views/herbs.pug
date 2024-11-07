@@ -17,8 +17,8 @@ html
                 p.card-text= item.uses
 div.container-fluid
     div.row
-      - for (const vehicle of results)
+      - for (const herbs of results)
         div.col-sm-2
-          p Vehicle Name: #{vehicle.vehicle_name}
-          p Vehicle Type: #{vehicle.vehicle_type}
-          p Max Speed: #{vehicle.max_speed} km/h
+          p herb Name: #{herb.herb_name}
+          p description : #{herb.herb_description}
+          p uses: #{herb.herb_uses}
