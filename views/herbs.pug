@@ -1,23 +1,24 @@
 doctype html
-html(lang="en")
+html
   head
-    meta(charset="UTF-8")
-    title Herbs Page
-    link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
-
-  body
-    h1 Herb Search Results
-    div.container
-      div.row
-      - var results = [
-         { name: 'Herb 1', description: 'A fragrant herb used in various cuisines', uses: 'Used in cooking, teas, and as garnish' },
-         { name: 'Herb 2', description: 'A cooling herb commonly used for its medicinal properties', uses: 'Used for digestive problems and skin care' },
-         { name: 'Herb 3', description: 'A woody herb known for its strong aroma', uses: 'Used in roasting meats, flavoring soups, and in aromatherapy' }
-        ]
-        each item in results
+  link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
+  -
+    const results = [
+      { name: 'Herb 1', description: 'A fragrant herb used in various cuisines', uses: 'Used in cooking, teas, and as garnish' },
+      { name: 'Herb 2', description: 'A cooling herb commonly used for its medicinal properties', uses: 'Used for digestive problems and skin care' },
+      { name: 'Herb 3', description: 'A woody herb known for its strong aroma', uses: 'Used in roasting meats, flavoring soups, and in aromatherapy' }
+    ];
+    each item in results
           div.col-sm-4
             div.card
               div.card-body
                 h5.card-title= item.name
                 p.card-text= item.description
                 p.card-text= item.uses
+div.container-fluid
+    div.row
+      - for (const vehicle of results)
+        div.col-sm-2
+          p Vehicle Name: #{vehicle.vehicle_name}
+          p Vehicle Type: #{vehicle.vehicle_type}
+          p Max Speed: #{vehicle.max_speed} km/h
