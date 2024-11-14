@@ -2,14 +2,17 @@
 const Herb = require('../models/herbs');
 
 // List all herbs
-exports.herb_list = async (req, res) => {
-  try {
-    const herbs = await Herb.find();
-    res.status(200).json(herbs);
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to fetch herbs' });
+exports.herb_list = async function(req, res) {
+  try{
+  theherbs = await herb.find();
+  res.send(theherbs);
   }
-};
+  catch(err){
+  res.status(500);
+  res.send(`{"error": ${err}}`);
+  }
+  };
+  
 
 // Get a specific Herb by ID
 exports.herb_detail = function(req, res) {
@@ -48,4 +51,16 @@ exports.herb_update_put = function(req, res) {
     if (err) return res.status(500).json({ message: "Error updating herb" });
     res.status(200).json(updatedHerb);
   });
+};
+
+exports.herb_list = async (req, res) => {
+  try {
+    const herbs = await Herb.find(); // Fetch all documents from the herbs collection
+    if (herbs.length === 0) {
+      return res.status(404).json({ message: 'No herbs found' }); // Handle empty collection
+    }
+    res.status(200).json(herbs); // Send the result as a JSON response
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch herbs', error: err.message }); // Handle any errors
+  }
 };
