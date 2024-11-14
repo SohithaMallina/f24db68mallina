@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require('mongoose');
+require('dotenv').config();  // To load environment variables from the .env file
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -11,6 +13,13 @@ const pickRouter = require('./routes/pick');
 const herb = require('./models/herb');
 
 var app = express();
+
+// MongoDB connection setup (updated)
+const connectionString = process.env.MONGO_CON; // Retrieve connection string from .env file
+
+mongoose.connect(connectionString)
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -35,9 +44,9 @@ app.use('/resource', resourceRouter);  // Route for all resource-related request
 app.get('/herbs', (req, res) => {
   const results = [
     { herb_name: 'Basil', description: 'A fragrant herb used in Italian cuisine', uses: 'Used in cooking, teas, and as garnish' },
-      { herb_name: 'Mint', description: 'A cooling herb commonly used for its medicinal properties', uses: 'Used for digestive problems and skin care' },
-      { herb_name: 'Rosemary', description: 'A woody herb known for its strong aroma', uses: 'Used in roasting meats, flavoring soups, and in aromatherapy' }
-    ];
+    { herb_name: 'Mint', description: 'A cooling herb commonly used for its medicinal properties', uses: 'Used for digestive problems and skin care' },
+    { herb_name: 'Rosemary', description: 'A woody herb known for its strong aroma', uses: 'Used in roasting meats, flavoring soups, and in aromatherapy' }
+  ];
   res.render('herbs', { results }); // Pass results to Pug
 });
 
@@ -78,18 +87,6 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {}; // Show detailed error in dev environment
   res.status(err.status || 500);
   res.render('error'); // Render error page
-});
-
-// MongoDB connection setup
-require('dotenv').config();
-const mongoose = require('mongoose');
-const connectionString = process.env.MONGO_CON;
-
-mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true });
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', function () {
-  console.log("Connection to DB succeeded");
 });
 
 module.exports = app;
