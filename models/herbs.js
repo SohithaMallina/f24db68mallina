@@ -1,10 +1,12 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+// models/herbs.js
+const mongoose = require('mongoose');
 
-var herbSchema = new Schema({
-  herb_name: { type: String, required: true },
+const herbSchema = new mongoose.Schema({
+  name: { type: String, required: true },
   price: { type: Number, required: true },
   functionality: { type: String, required: true }
 });
 
-module.exports = mongoose.model('herb', herbSchema);
+const Herb = mongoose.model('Herb', herbSchema);
+
+module.exports = Herb;
