@@ -37,9 +37,7 @@ app.use('/users', usersRouter);
 app.use('/grid', gridRouter);
 app.use('/selector', pickRouter);
 
-var resourceRouter = require('./routes/resource'); // Ensure this path is correct
 
-app.use('/resource', resourceRouter);  // Route for all resource-related requests
 
 app.get('/herbs', (req, res) => {
   const results = [
@@ -48,32 +46,6 @@ app.get('/herbs', (req, res) => {
     { herb_name: 'Rosemary', description: 'A woody herb known for its strong aroma', uses: 'Used in roasting meats, flavoring soups, and in aromatherapy' }
   ];
   res.render('herbs', { results }); // Pass results to Pug
-});
-
-// Resource Route
-app.get('/resource', (req, res) => {
-  res.send('Resource page');
-});
-
-app.get('/resource/herbs', async (req, res) => {
-  try {
-    const herbs = await herb.find();
-    res.json(herbs); 
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Failed to fetch herbs" });
-  }
-});
-
-app.post('/resource/herbs', async (req, res) => {
-  try {
-    const newherb = new herb(req.body);
-    await newherb.save();
-    res.status(201).json({ message: 'herb created successfully', herb: newherb });
-  } catch (err) {
-    console.error(err);
-    res.status(400).json({ message: "Failed to create herb" });
-  }
 });
 
 // General Error Handling Route (for unknown routes)
