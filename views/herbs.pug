@@ -6,14 +6,14 @@ html
     //- Define the array of herbs
     -
       const results = [
-        { name: 'Herb 1', description: 'A fragrant herb used in various cuisines', uses: 'Used in cooking, teas, and as garnish' },
-        { name: 'Herb 2', description: 'A cooling herb commonly used for its medicinal properties', uses: 'Used for digestive problems and skin care' },
-        { name: 'Herb 3', description: 'A woody herb known for its strong aroma', uses: 'Used in roasting meats, flavoring soups, and in aromatherapy' }
+        { name: 'Basil', description: 'A fragrant herb used in various cuisines', uses: 'Used in cooking, teas, and as garnish' },
+        { name: 'Mint', description: 'A cooling herb commonly used for its medicinal properties', uses: 'Used for digestive problems and skin care' },
+        { name: 'Rosemary', description: 'A woody herb known for its strong aroma', uses: 'Used in roasting meats, flavoring soups, and in aromatherapy' }
       ];
 
     div.container-fluid
       div.row
-        each item in results
+        each item,index in results
           div.col-sm-4.mb-3
             div.card
               div.card-body
@@ -24,7 +24,7 @@ html
                 p.card-text
                   strong Uses: 
                   | #{item.uses}
-                button(class="buy-btn btn btn-primary mt-2" data-index=index data-name=item.name) Buy
+                button(class="buy-btn btn btn-primary mt-2" data-index=(index+1) data-name=item.name) Buy
     script.
       document.addEventListener('DOMContentLoaded', function() {
         const buyButtons = document.querySelectorAll('.buy-btn');
