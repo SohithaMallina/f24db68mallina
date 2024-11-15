@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  h1= title
+  each site in results
+    h3 Name: #{site.site_name}
+    li Location: #{site.location}
+    li Established: #{site.year_established}

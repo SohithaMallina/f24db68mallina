@@ -1,7 +1,9 @@
+// API for our resources
 exports.api = function(req, res) {
-    res.status(200).json({
-      resources: [
-        { resource: 'herbs', verbs: ['GET', 'POST', 'PUT', 'DELETE'] }
-      ]
-    });
-  };
+  res.write('[');
+  res.write('{"resource":"heritageSites", ');
+  res.write(' "verbs":["GET","PUT", "DELETE"] ');
+  res.write('}');
+  res.write(']');
+  res.send();
+};

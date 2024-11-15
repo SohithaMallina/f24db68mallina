@@ -1,28 +1,19 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-// Require controller modules.
-var api_controller = require('../controllers/api');
-var herb_controller = require('../controllers/herb');
-const herbController = require('../controllers/herb'); 
-// API ROUTE
-// GET resources base.
+// Require controller modules
+const api_controller = require('../controllers/api');
+const heritageSiteController = require('../controllers/heritagesite');
+
+// Base API route
 router.get('/', api_controller.api);
 
-// HERB ROUTES
-// POST request for creating a Herb.
-router.post('/herbs', herb_controller.herb_create_post);
-
-// DELETE request to delete Herb.
-router.delete('/herbs/:id', herb_controller.herb_delete);
-
-// PUT request to update Herb.
-router.put('/herbs/:id', herb_controller.herb_update_put);
-
-// GET request for one Herb.
-router.get('/herbs/:id', herb_controller.herb_detail);
-
-// GET request for list of all Herb items.
-router.get('/herbs', herb_controller.herb_list);
+// API routes for Heritage Site
+router.post('/heritageSites', heritageSiteController.heritageSite_create_post);
+router.get('/heritageSites', heritageSiteController.heritageSite_list);
+router.get('/heritageSites/all', heritageSiteController.heritageSite_view_all_Page);
+router.get('/heritageSites/:id', heritageSiteController.heritageSite_detail);
+router.put('/heritageSites/:id', heritageSiteController.heritageSite_update_put);
+router.delete('/heritageSites/:id', heritageSiteController.heritageSite_delete);
 
 module.exports = router;

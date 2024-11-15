@@ -1,96 +1,78 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mongoose = require('mongoose');
-require('dotenv').config();  // To load environment variables from the .env file
-
+const mongoose = require('mongoose');
+const connectionString = process.env.MONGO_CON;
+mongoose.connect(connectionString);
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {
+  console.log("Connection to DB succeeded");
+});
+ 
+// Initialize app first
+var app = express();
+ 
+// Routers
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const gridRouter = require('./routes/grid');
-const pickRouter = require('./routes/pick');
-var herb = require('./models/herbs');
-
-var app = express();
-
-// MongoDB connection setup (updated)
-const connectionString = process.env.MONGO_CON; // Retrieve connection string from .env file
-
-mongoose.connect(connectionString)
-  .then(() => console.log('MongoDB connected successfully'))
-  .catch(err => console.error('MongoDB connection error:', err));
-
-// View engine setup
+var gridRouter = require('./routes/grid');
+var pickRouter = require('./routes/pick');
+const HeritageSite = require('./models/heritageSite');
+const resourceRouter = require('./routes/resource');
+var heritageSitesRouter = require('./routes/heritagesites');  
+ 
+// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-
+ 
+// Middleware setup
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Set up routes
+ 
+// Use routers after app is initialized
+app.use('/heritagesites', heritageSitesRouter);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/grid', gridRouter);
-app.use('/selector', pickRouter);
-
-
-var resourceRouter = require('./routes/resource'); // Ensure this path is correct
-
-app.use('/resource', resourceRouter);  // Route for all resource-related requests
-
-app.get('/herbs', (req, res) => {
-  const results = [
-    { herb_name: 'Basil', description: 'A fragrant herb used in Italian cuisine', uses: 'Used in cooking, teas, and as garnish' },
-    { herb_name: 'Mint', description: 'A cooling herb commonly used for its medicinal properties', uses: 'Used for digestive problems and skin care' },
-    { herb_name: 'Rosemary', description: 'A woody herb known for its strong aroma', uses: 'Used in roasting meats, flavoring soups, and in aromatherapy' }
-  ];
-  res.render('herbs', { results }); // Pass results to Pug
-});
-
-// Resource Route
-app.get('/resource', (req, res) => {
-  res.send('Resource page');
-});
-
-app.get('/resource/herbs', async (req, res) => {
-  try {
-    const herbs = await herb.find();
-    res.json(herbs); 
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Failed to fetch herbs" });
-  }
-});
-
-app.post('/resource/herbs', async (req, res) => {
-  try {
-    const newherb = new herb(req.body);
-    await newherb.save();
-    res.status(201).json({ message: 'herb created successfully', herb: newherb });
-  } catch (err) {
-    console.error(err);
-    res.status(400).json({ message: "Failed to create herb" });
-  }
-});
-
-// General Error Handling Route (for unknown routes)
+app.use('/randomitem', pickRouter);
+app.use('/resource', resourceRouter);
+ 
+// catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404)); // Trigger 404 error if route doesn't match
+  next(createError(404));
 });
-
+ 
 // Error handler
 app.use(function(err, req, res, next) {
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {}; // Show detailed error in dev environment
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+ 
   res.status(err.status || 500);
-  res.render('error'); // Render error page
+  res.render('error');
 });
-
-app.listen(3000, () => {
-  console.log(`Server running at http://localhost:${3000}`);
-});
+ 
+// Recreate DB with sample data
+async function recreateDB() {
+  await HeritageSite.deleteMany();
+ 
+  const site1 = new HeritageSite({ site_name: "Yellowstone National Park", location: "USA", year_established: 1978 });
+  const site2 = new HeritageSite({ site_name: "Acropolis of Athens", location: "Greece", year_established: 500 });
+  const site3 = new HeritageSite({ site_name: "Colosseum", location: "Italy", year_established: 72 });
+ 
+  site1.save().then(doc => console.log("First heritage site saved:", doc)).catch(console.error);
+  site2.save().then(doc => console.log("Second heritage site saved:", doc)).catch(console.error);
+  site3.save().then(doc => console.log("Third heritage site saved:", doc)).catch(console.error);
+}
+ 
+const reseed = true;
+if (reseed) { recreateDB(); }
+ 
 module.exports = app;
+ 
