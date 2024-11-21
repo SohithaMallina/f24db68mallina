@@ -1,0 +1,43 @@
+doctype html
+html
+  head
+    link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
+  body
+    //- Define the array of herbs
+    -
+      const results = [
+        { name: 'Basil', description: 'A fragrant herb used in various cuisines', uses: 'Used in cooking, teas, and as garnish' },
+        { name: 'Mint', description: 'A cooling herb commonly used for its medicinal properties', uses: 'Used for digestive problems and skin care' },
+        { name: 'Rosemary', description: 'A woody herb known for its strong aroma', uses: 'Used in roasting meats, flavoring soups, and in aromatherapy' }
+      ];
+
+    div.container-fluid
+      div.row
+        each item,index in results
+          div.col-sm-4.mb-3
+            div.card
+              div.card-body
+                h5.card-title= item.name
+                p.card-text
+                  strong Description: 
+                  | #{item.description}
+                p.card-text
+                  strong Uses: 
+                  | #{item.uses}
+                button(class="buy-btn btn btn-primary mt-2" data-index=(index+1) data-name=item.name) Buy
+    script.
+      document.addEventListener('DOMContentLoaded', function() {
+        const buyButtons = document.querySelectorAll('.buy-btn');
+        buyButtons.forEach(button => {
+          button.addEventListener('click', function() {
+            const index = button.getAttribute('data-index');
+            const name = button.getAttribute('data-name');
+            buy(index, name);
+          });
+        });
+      });
+
+      function buy(index, name) {
+        alert("You purchased herb " + index + ": " + name);
+      }
+      

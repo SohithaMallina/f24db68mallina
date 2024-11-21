@@ -62,9 +62,9 @@ app.use(function(err, req, res, next) {
 async function recreateDB() {
   await HeritageSite.deleteMany();
  
-  const site1 = new HeritageSite({ site_name: "Yellowstone National Park", location: "USA", year_established: 1978 });
-  const site2 = new HeritageSite({ site_name: "Acropolis of Athens", location: "Greece", year_established: 500 });
-  const site3 = new HeritageSite({ site_name: "Colosseum", location: "Italy", year_established: 72 });
+  const site1 = new HeritageSite({ site_name: "Great Wall of China", location: "China", year_established: 1987 });
+  const site2 = new HeritageSite({ site_name: "Machu Picchu", location: "Peru", year_established: 1450 });
+  const site3 = new HeritageSite({ site_name: "Pyramids of Giza", location: "Egypt", year_established: -2560 });
  
   site1.save().then(doc => console.log("First heritage site saved:", doc)).catch(console.error);
   site2.save().then(doc => console.log("Second heritage site saved:", doc)).catch(console.error);
