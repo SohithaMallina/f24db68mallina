@@ -1,33 +1,32 @@
-doctype html
-html
-  head
-    title Grid Display
-    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css")
-  body
-    h1 #{title}
+extends layout
 
-    // Display query values as paragraph
-    p Rows: #{query.rows}, Cols: #{query.cols}
-
-    // Convert query strings to numbers
-    -
-      let rows = Number(query.rows);
-      let cols = Number(query.cols);
-
-    // Check if rows and cols are integers and within the valid range
-    if (!Number.isInteger(rows) || !Number.isInteger(cols))
-      p Invalid input: rows and cols must be integers.
-    else if (rows < 3 || rows > 13)
-      p Invalid input: rows must be between 3 and 13.
-    else if (cols < 3 || cols > 13)
-      p Invalid input: cols must be between 3 and 13.
-    else
-      // Create a table with the correct dimensions
-      table#outer.container-fluid
-        - for (let i = 0; i < rows; i++) {
-          tr#middle.row
-            - for (let j = 0; j < cols; j++) {
-              // Calculate cell value: row^2 + col
-              td.col-sm-1= i * i + j
-            - }
-        - }
+block content
+  h1= title
+  form(id='HeritageSiteForm', action="/resource/heritageSites", method="POST")
+    div.form-group
+      label.siteAttr(for='site_name') Site Name
+      input#site_name(type='text', name='site_name', required=true)
+    div.form-group
+      label.siteAttr(for='location') Location
+      input#location(type='text', name='location', required=true)
+    div.form-group
+      label.siteAttr(for='year_established') Year Established
+      input#year_established(type='number', name='year_established', required=true)
+    input(type="submit", value="Create")
+  
+  script.
+    document.forms['HeritageSiteForm'].addEventListener('submit', (event) => {
+      event.preventDefault();
+      // Show user that form is being submitted
+      fetch(event.target.action, {
+        method: 'POST',
+        body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+      })
+      .then((resp) => resp.json())
+      .then((body) => {
+        alert("Save succeeded!");
+      })
+      .catch((error) => {
+        alert("Save failed: " + error);
+      });
+    });

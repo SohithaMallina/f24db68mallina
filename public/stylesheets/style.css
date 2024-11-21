@@ -4,5 +4,10 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  color: #ff0090;
+}
+
+.siteAttr {
+  background-color: rgb(127, 242, 255);
+  width: 120px;
 }
